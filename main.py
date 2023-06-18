@@ -123,7 +123,7 @@ if __name__ == '__main__':
     except ValueError as e:
         print("Błąd:", str(e))
 
-    element_from_hex = hex_to_table(0x13)  # dla Z_2 [X] element = [1, 1, 0, 0, 1] można zapisać jako 0x1E
+    element_from_hex = hex_to_table(0x13)  # dla Z_2 [X] element = [1, 0, 1, 1, 1] można zapisać jako 0x1D
 
     element = [1, 1, 0, 0, 1, 0, 1]  # x^0, x^1, x^2, ....
     modulus = [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]  # x^0, x^1, x^2, ....
