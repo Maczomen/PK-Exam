@@ -98,8 +98,8 @@ def str_shorter(polynomial):
 
 
 if __name__ == '__main__':
-    num = 9
-    mod = 889
+    num = 868224
+    mod = 1064359
     try:
         inverse = modular_multiplication_inverse(num, mod) % mod
         print("Element odwrotny dla liczby", num, "w grupie (Z_" + str(mod) + ", ∗_" + str(mod) + ") wynosi:", inverse)
@@ -111,10 +111,10 @@ if __name__ == '__main__':
 
     element = [1, 1, 0, 0, 1, 0, 1]  # x^0, x^1, x^2, ....
     modulus = [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]  # x^0, x^1, x^2, ....
-    # element = hex_to_table(0x1)  # x^0, x^1, x^2, ....
+    # element = hex_to_table(0x1)
     # element = [2, 2]  # x^0, x^1, x^2, ....
-    # modulus = hex_to_table(0x5)  # x^0, x^1, x^2, ....
-    order = 2
+    # modulus = hex_to_table(0x5)
+    order = 2 # ciało Z_order [X]
 
     inverse = find_inverse_polynomial(element, modulus, order)
     print("Element odwrotny dla polynomialu ")
