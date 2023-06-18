@@ -72,7 +72,11 @@ def polynomial_floor_division_mod(pol1, pol2, mod):
     return P(list(reversed(result))).trim(), P(list(reversed(pol1_arr))).trim()
 
 
-def find_inverse_polynomial(element, modulus, order):
+def polynomial_mod_int(polynomial, num):
+    return P(np.mod(polynomial.coef, num)).trim()
+
+
+def find_inverse_multiplication_polynomial(element, modulus, order):
     element = P(element).trim()
     modulus = P(modulus).trim()
     d, s, t = extended_gcd_polynomial(element, modulus, order)
@@ -82,8 +86,12 @@ def find_inverse_polynomial(element, modulus, order):
     return polynomial_mod_int(test, order)
 
 
-def polynomial_mod_int(polynomial, num):
-    return P(np.mod(polynomial.coef, num)).trim()
+def find_inverse_addition_polynomial(element, order):
+    result = []
+    for num in element:
+        result.append(modular_addition_inverse(num, order))
+
+    return P(result)
 
 
 def str_shorter(polynomial):
@@ -101,9 +109,17 @@ if __name__ == '__main__':
     num = 868224
     mod = 1064359
     try:
-        inverse = modular_multiplication_inverse(num, mod) % mod
-        print("Element odwrotny dla liczby", num, "w grupie (Z_" + str(mod) + ", ∗_" + str(mod) + ") wynosi:", inverse)
-        print("Test:", num, "*", inverse, "%", mod, "=", num * inverse % mod)  # should return 1
+        inverse_multi_for_group = modular_multiplication_inverse(num, mod) % mod
+        print("Element odwrotny dla liczby", num, "w grupie (Z_" + str(mod) + ", ∗_" + str(mod) + ") wynosi:",
+              inverse_multi_for_group)
+        print("Test:", num, "*", inverse_multi_for_group, "%", mod, "=", (num * inverse_multi_for_group) % mod)  # should return 1
+        print()
+
+        inverse_add_for_group = modular_addition_inverse(num, mod) % mod
+        print("Element odwrotny dla liczby", num, "w grupie (Z_" + str(mod) + ", +_" + str(mod) + ") wynosi:",
+              inverse_add_for_group)
+        print("Test:", num, "+", inverse_add_for_group, "%", mod, "=", (num + inverse_add_for_group) % mod)  # should return 1
+        print()
     except ValueError as e:
         print("Błąd:", str(e))
 
@@ -114,12 +130,20 @@ if __name__ == '__main__':
     # element = hex_to_table(0x1)
     # element = [2, 2]  # x^0, x^1, x^2, ....
     # modulus = hex_to_table(0x5)
-    order = 2 # ciało Z_order [X]
+    order = 2  # ciało Z_order [X]
 
-    inverse = find_inverse_polynomial(element, modulus, order)
-    print("Element odwrotny dla polynomialu ")
+    inverse_multi_poly = find_inverse_multiplication_polynomial(element, modulus, order)
+    print("Element odwrotny (mnożenia) dla polynomialu ")
     print(str_shorter(P(element)))
     print("W ciele Z_" + str(order) + " [X]/<" + str_shorter(P(modulus)) + "> wynosi: ")
-    print(str_shorter(inverse))
+    print(str_shorter(inverse_multi_poly))
 
-    print("Test: " + str_shorter(polynomial_mod_int(inverse * element % modulus, order)))  # should return 1.0 * x^0
+    print("Test: " + str_shorter(
+        polynomial_mod_int(inverse_multi_poly * element % modulus, order)))  # should return 1.0 * x^0
+    print()
+
+    inverse_add_poly = find_inverse_addition_polynomial(element, order)
+    print("Element odwrotny (dodawania) dla polynomialu ")
+    print(str_shorter(P(element)))
+    print("W ciele Z_" + str(order) + " [X]/<" + str_shorter(P(modulus)) + "> wynosi: ")
+    print(str_shorter(inverse_add_poly))
